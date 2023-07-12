@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSViiZ8gMHb0vpiKsczva15GRDSEiB86B5lNg&usqp=CAU">
+  <title>Json Verifier</title>
+</head>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Source+Code+Pro:wght@300;400;500&display=swap");
+
+  * {
+    background: #f9f9f9;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    display: flex;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  #area {
+    padding: 0;
+    display: inline;
+    min-height: 99vh;
+    width: 75vw;
+    border: none;
+    line-height: 17px;
+    overflow-x: scroll;
+    font: 400 14px "Source Code Pro";
+    font: 500 16px "cutive mono";
+    background-color: transparent;
+    outline: none;
+  }
+
+  #num {
+    border: none;
+    padding: 0;
+    display: inline;
+    min-height: 99vh;
+    width: 50px;
+    line-height: 14px;
+    text-align: end;
+    font: 500 16px "cutive mono";
+    background-color: transparent;
+    outline: none;
+  }
+
+  #num::-webkit-scrollbar {
+    display: none;
+  }
+
+  div {
+    height: fit-content;
+    width: fit-content;
+    display: inline-block;
+    border: 2px solid rgb(139, 139, 139);
+    background-color: #90d1e938;
+  }
+
+  span {
+    width: calc(25vw - 50px);
+    height: 100vh;
+    position: fixed;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: inset 0px 0px 5px rgb(137, 137, 137);
+  }
+
+  button {
+    width: 30%;
+    font: 500 16px "";
+    border: 1px solid #d6d6d6;
+    padding: 2px 5px;
+    margin: 5px 0;
+  }
+
+  button:hover {
+    background-color: #90d1e938;
+  }
+  b{
+    position: absolute;
+    top: 15%;
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    height: 160px;
+    /* background-color: aqua; */
+  }
+  i{
+width: 35px ;
+height: 35px;
+background-color: #90d1e938;
+/* border: 1px solid black; */
+/* position: relative; */
+transition: 0.5s all ease-in-out;
+box-shadow: 0px 0px 3px #909090;
+margin: 5px;
+  }
+
+  
+  /* #i2{
+    transform: translate(-130%,120%);
+  }
+  #i3{
+    transform: translate(-260%,240%);
+  } */
+</style>
+
+<body>
+  <div>
+    <textarea id="num" readonly></textarea>
+    <textarea oninput="abcd()" onchange="abcd()" id="area" wrap="off" placeholder="Paste Your JSON Here..."></textarea>
+  </div>
+  <span>
+    
+    <b>
+      <i id="i1"></i>
+      <i id="i2"></i>
+      <i id="i3"></i>
+    </b>
+    <button id="but1" onclick="verify()">Verify</button>
+    <button id="but2" onclick="max()">Beautify</button>
+    <button id="but2" onclick="min()">Minify</button>
+  </span>
+  <script>
+    const num = document.querySelector("#num");
+    const hv = document.querySelector("#area");
+    const myDiv = document.querySelector("div");
+    const i1 = document.querySelector("#i1");
+    const i2 = document.querySelector("#i2");
+    const i3 = document.querySelector("#i3");
+    var a = [];
+    for (var i = 0; i < hv.offsetHeight / 18; i++) {
+      a[i] = `${i}.`;
+    }
+    myA = a.join("\n");
+    num.value = myA;
+    function abcd() {
+      var arr = [];
+      var count = hv.value.split("\n");
+      hv.style.height = `${count.length * 18}px`;
+      num.style.height = `${count.length * 18}px`;
+      for (var i = 0; i < hv.offsetHeight / 18; i++) {
+        arr[i] = `${i}.`;
+      }
+      myArray = arr.join("\n");
+      num.value = myArray;
+
+    }
+    function verify() {
+      let val;
+      try {
+        JSON.parse(hv.value);
+        myDiv.style.backgroundColor = "rgba(127, 255, 212, 0.24)";
+        i1.style.backgroundColor = "rgba(127, 255, 212, 0.24)";
+        i2.style.backgroundColor = "rgba(127, 255, 212, 0.24)";
+        i3.style.backgroundColor = "rgba(127, 255, 212, 0.24)";
+
+      } catch (e) {
+        myDiv.style.backgroundColor = "rgba(216, 157, 157, 0.38)";
+        i1.style.backgroundColor = "rgba(216, 157, 157, 0.38)";
+        i2.style.backgroundColor = "rgba(216, 157, 157, 0.38)";
+        i3.style.backgroundColor = "rgba(216, 157, 157, 0.38)";
+        const err = e.message.split(' ')
+
+        val = err[err.length - 1]
+        // if (err[0] == 'Expected') {
+          if (val*0==0) {
+          
+          hv.focus()
+          hv.selectionStart = val;
+          hv.selectionEnd = val;
+
+          alert(e.message)
+        }
+        else {
+          alert(e.message)
+        }
+      }
+    }
+    let k = 0;
+    function min() {
+
+      const a = hv.value.replace(/\s\s+/g, "");
+      const b = a.split(": ");
+      const c = b.join(":");
+      const d = c.split("\n");
+      const e = d.join("");
+      hv.value = e;
+      verify()
+      abcd()
+      i2.style.transform='translate(0,0)'
+        i3.style.transform='translate(0,0)'
+
+    }
+    function max() {
+      try {
+        const abc = JSON.parse(hv.value);
+        const def = JSON.stringify(abc, null, "\t");
+        hv.value = def;
+        verify()
+        abcd()
+        i2.style.transform='translate(0,120%)'
+        i3.style.transform='translate(0,240%)'
+      }
+      catch (err) {
+
+        const a = hv.value.split('",');
+        const b = a.join('", \n');
+        const c = b.split("},");
+        const d = c.join("}, \n");
+        const e = d.split("{");
+        const f = e.join("{ \n");
+        hv.value = f;
+        verify()
+        abcd()
+        i2.style.transform='translate(-130%,120%)'
+        i3.style.transform='translate(-260%,240%)'
+      }
+
+    }
+  </script>
+</body>
+
+</html>
