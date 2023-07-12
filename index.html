@@ -209,6 +209,7 @@ margin: 5px;
         const abc = JSON.parse(hv.value);
         const def = JSON.stringify(abc, null, "\t");
         hv.value = def;
+        hv.scrollLeft = 0;
         verify()
         abcd()
         i2.style.transform='translate(0,120%)'
